@@ -1,4 +1,4 @@
-<img width="160px" style="border-radius: 50%" bor src="images/docs-icon.svg">
+<img width="160px" style="border-radius: 50%" bor src="images/docs-icon.png">
 
 # 在线文档
 
