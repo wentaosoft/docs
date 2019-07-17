@@ -1,53 +1,118 @@
-# 创建自定义模板
+# 服务端渲染（SSR）
 
-Typecho 自定义模板，一是自定义首页模板；二是自定义页面模板；这两者方法不同，下面具体说明。
-### 自定义首页模板
-在当前模板目录下面建你需要的文件（例如：home.php），然后再文件的开头加上如下代码(需在 package 后面加上 index)就算是自定义了好了一个首页；
-```php
-<?php
-/**
- * 自定义首页模板
- *
- * @package index
- */
-```
-然后进入后台的**设置→阅读**页面，选择“站点首页”中的“直接调用[home.php]模板文件”，保存即可。
+先看例子 https://docsify.now.sh
 
-### 自定义页面(page)模板
-只需要在当前模板目录下面建你需要的文件，然后再文件的开头加上如下代码(需在package后面加上custom)就算是自定义了好了一个页面，可以自定义多个页面；
-```php
-<?php
-/**
- * 自定义页面模板
- *
- * @package custom
- */
+项目地址在 https://github.com/docsifyjs/docsify-ssr-demo
+
+![](https://dn-mhke0kuv.qbox.me/2bfef08c592706108055.png)
+
+文档依旧是部署在 GitHub Pages 上，Node 服务部署在 now.sh 里，渲染的内容是从 GitHub Pages 上同步过来的。所以静态部署文档的服务器和服务端渲染的 Node 服务器是分开的，也就是说你还是可以用之前的方式更新文档，并不需要每次都部署。
+
+
+
+## 快速开始
+
+如果你熟悉 `now` 的使用，接下来的介绍就很简单了。先创建一个新项目，并安装 `now` 和 `docsify-cli`。
+
+```bash
+mkdir my-ssr-demo && cd my-ssr-demo
+npm init -y
+npm i now docsify-cli -D
 ```
 
-其中 **@package custom** 是必须的，然后进入typecho后台在 **创建页面** 的 **自定义模板里** 就可以看到
+配置 `package.json`
 
-### 自定义分类模板
-
-#### 方法一
-
-直接在当前模板目录下建立一个名为 category 的目录，然后在里面放上以你需要单独做模板分类的缩略名为文件名的 php 文件，比如 default.php，这样，在访问缩略名为default的分类时，它会自动调用这个模板。
-
-#### 方法二
-
-在模板文件中使用 is 语法判断页面
-```php
-<?php if ($this->is('category', 'default')): ?>
-//默认分类模板
-<?php endif; ?>
-<?php if ($this->is('category', 'category2')): ?>
-//分类2模板
-<?php endif; ?>
+```json
+{
+  "scripts": {
+    "start": "docsify start .",
+    "deploy": "now -p"
+  },
+  "docsify": {
+    "config": {
+      "basePath": "https://docsify.js.org/",
+      "loadSidebar": true,
+      "loadNavbar": true
+    }
+  }
+}
 ```
 
-### 自定义页面/文章模板
+如果你还没有创建文档，可以参考[之前的文章](https://zhuanlan.zhihu.com/p/24540753)。其中 `basePath` 为文档所在的路径，可以填你的 docsify 文档网站。
 
-给某个独立页面自定义皮肤
-在模板文件夹下，建立文件夹`page`，然后在里面放置一个php文件，名字为`缩略名.php`，然后里面的内容就是你想要自定义的皮肤。
+配置可以单独写在配置文件内，然后通过 `--config config.js` 加载。
 
-给某篇文章自定义皮肤
-在模板文件夹下，建立文件夹`post`，然后在里面放置一个php文件，名字为`文章id.php`，然后里面的内容就是你想要自定义的皮肤。
+渲染的基础模版也可以自定义，配置在 `template` 属性上，例如
+
+```js
+"docsify": {
+    "template": "./ssr.html",
+    "config": {
+      "basePath": "https://docsify.js.org/",
+      "loadSidebar": true,
+      "loadNavbar": true
+    }
+  }
+```
+
+*ssr.html*
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>docsify</title>
+  <link rel="icon" href="_media/favicon.ico">
+  <meta name="keywords" content="doc,docs,documentation,gitbook,creator,generator,github,jekyll,github-pages">
+  <meta name="description" content="A magical documentation generator.">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <link rel="stylesheet" href="//unpkg.com/docsify/lib/themes/vue.css" title="vue">
+</head>
+<body>
+  <!--inject-app-->
+  <!--inject-config-->
+</body>
+<script src="//unpkg.com/docsify/lib/docsify.min.js"></script>
+<script src="//unpkg.com/docsify/lib/plugins/search.min.js"></script>
+</html>
+
+```
+
+其中 `<!--inject-app-->` 和 `<!--inject-config-->` 为占位符，会自动将渲染后的 html 和配置内容注入到页面上。
+
+现在，你可以运行 `npm start` 预览效果，如果没有问题就通过 `npm run deploy` 部署服务。
+
+```bash
+npm start
+# open http://localhost:4000
+
+npm run deploy
+# now ...
+```
+
+
+
+## 更多玩法
+
+`docsify start` 其实是依赖了 [`docsify-server-renderer`](https://npmarket.surge.sh/?name=docsify-server-renderer) 模块，如果你感兴趣，你完全可以用它自己实现一个 server，可以加入缓存等功能。
+
+```js
+var Renderer = require('docsify-server-renderer')
+var readFileSync = require('fs').readFileSync
+
+// init
+var renderer = new Renderer({
+  template: readFileSync('./docs/index.template.html', 'utf-8').,
+  config: {
+    name: 'docsify',
+    repo: 'docsifyjs/docsify'
+  }
+})
+
+renderer.renderToString(url)
+  .then(html => {})
+  .catch(err => {})
+```
+
+当然文档文件和 server 也是可以部署在一起的，`basePath` 不是一个 URL 的话就会当做文件路径处理，也就是从服务器上加载资源。

@@ -1,53 +1,49 @@
-# 创建自定义模板
+# CDN
 
-Typecho 自定义模板，一是自定义首页模板；二是自定义页面模板；这两者方法不同，下面具体说明。
-### 自定义首页模板
-在当前模板目录下面建你需要的文件（例如：home.php），然后再文件的开头加上如下代码(需在 package 后面加上 index)就算是自定义了好了一个首页；
-```php
-<?php
-/**
- * 自定义首页模板
- *
- * @package index
- */
-```
-然后进入后台的**设置→阅读**页面，选择“站点首页”中的“直接调用[home.php]模板文件”，保存即可。
+推荐使用 [unpkg](//unpkg.com) —— 能及时获取到最新版。
 
-### 自定义页面(page)模板
-只需要在当前模板目录下面建你需要的文件，然后再文件的开头加上如下代码(需在package后面加上custom)就算是自定义了好了一个页面，可以自定义多个页面；
-```php
-<?php
-/**
- * 自定义页面模板
- *
- * @package custom
- */
+## 获取最新版本
+
+根据 UNPKG 的规则，不指定特定版本号时将引入最新版。
+
+```html
+<!-- 引入 css -->
+<link rel="stylesheet" href="//unpkg.com/docsify/themes/vue.css">
+
+<!-- 引入 script -->
+<script src="//unpkg.com/docsify/lib/docsify.js"></script>
 ```
 
-其中 **@package custom** 是必须的，然后进入typecho后台在 **创建页面** 的 **自定义模板里** 就可以看到
+## 获取指定版本
 
-### 自定义分类模板
+如果担心频繁地版本更新又可能引入未知 Bug，我们也可以使用具体的版本。规则是 `//unpkg.com/docsify@VERSION/`
 
-#### 方法一
+```html
+<!-- 引入 css -->
+<link rel="stylesheet" href="//unpkg.com/docsify@2.0.0/themes/vue.css">
 
-直接在当前模板目录下建立一个名为 category 的目录，然后在里面放上以你需要单独做模板分类的缩略名为文件名的 php 文件，比如 default.php，这样，在访问缩略名为default的分类时，它会自动调用这个模板。
-
-#### 方法二
-
-在模板文件中使用 is 语法判断页面
-```php
-<?php if ($this->is('category', 'default')): ?>
-//默认分类模板
-<?php endif; ?>
-<?php if ($this->is('category', 'category2')): ?>
-//分类2模板
-<?php endif; ?>
+<!-- 引入 script -->
+<script src="//unpkg.com/docsify@2.0.0/lib/docsify.js"></script>
 ```
 
-### 自定义页面/文章模板
+!> 指定 *VERSION* 为 `latest` 可以强制每次都请求最新版本。
 
-给某个独立页面自定义皮肤
-在模板文件夹下，建立文件夹`page`，然后在里面放置一个php文件，名字为`缩略名.php`，然后里面的内容就是你想要自定义的皮肤。
+## 压缩版
 
-给某篇文章自定义皮肤
-在模板文件夹下，建立文件夹`post`，然后在里面放置一个php文件，名字为`文章id.php`，然后里面的内容就是你想要自定义的皮肤。
+CSS 的压缩文件位于 `/lib/themes/` 目录下
+
+```html
+<link rel="stylesheet" href="//unpkg.com/docsify/lib/themes/vue.css">
+```
+
+JS 的压缩文件是原有文件路径的基础上加 `.min`后缀
+
+```html
+<script src="//unpkg.com/docsify/lib/docsify.min.js"></script>
+```
+
+## 其他 CDN
+
+- http://www.bootcdn.cn/docsify (支持国内)
+- https://cdn.jsdelivr.net/npm/docsify/ (国内外都支持)
+- https://cdnjs.com/libraries/docsify
