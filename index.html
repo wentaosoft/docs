@@ -11,7 +11,7 @@
 <body>
     <nav>
         <a href="http://typecho.org/" target="_blank">typecho</a>
-        <a href="http://qqdie.com" target="_blank">Blog</a>
+        <a href="#" target="_blank">Blog</a>
     </nav>
     <div id="app"></div>
     <script>
@@ -23,18 +23,21 @@
         // 加载 _coverpage.md 启用封面页
         coverpage: true,
         // 加载 渲染文档中所有标题成目录
-        maxLevel: 3,
+        maxLevel: 4,
         // 加载 _navbar.md
-        loadNavbar: true,
+        // loadNavbar: true,
         // 加载 _sidebar.md
         loadSidebar: true,
         // 加载 侧边栏默认不会再生成目录，通过设置生成目录的最大层级开启功能
         subMaxLevel: 2,
         // 加载 全文搜索
         search: {
+            // 过期时间，单位毫秒，默认一天
+            maxAge: 180000,
             paths: 'auto',
             placeholder: '输入关键字，快速寻找答案 ',
             noData: '没有结果! ',
+            // 搜索标题的最大程级, 1 - 6
             depth: 6,
       },
         }
