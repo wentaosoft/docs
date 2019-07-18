@@ -1,5 +1,3 @@
-* [简介](README.md)
-
 * 入门
     * [快速开始](/introduction/快速开始)
     * [多页文档](/introduction/多页文档)
