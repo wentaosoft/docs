@@ -16,11 +16,21 @@
     <div id="app"></div>
     <script>
         window.$docsify = {
+        // 加载 文档标题，侧边栏顶部
         name: '在线文档',
+        // 加载 页面右上角渲染一个 GitHub Corner 挂件
         repo: 'https://github.com/wentaosoft/docs',
+        // 加载 _coverpage.md 启用封面页
         coverpage: true,
+        // 加载 渲染文档中所有标题成目录
+        maxLevel: 3,
+        // 加载 _navbar.md
         loadNavbar: true,
+        // 加载 _sidebar.md
+        loadSidebar: true,
+        // 加载 侧边栏默认不会再生成目录，通过设置生成目录的最大层级开启功能
         subMaxLevel: 2,
+        // 加载 全文搜索
         search: {
             paths: 'auto',
             placeholder: '输入关键字，快速寻找答案 ',
